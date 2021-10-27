@@ -31,6 +31,7 @@
                         <th>Marca</th>
                         <th>Valor de venda</th>
                         <th>Quantidade em estoque</th>
+												<th>Imagem</th>
                         <th>Ação</th>
                     </tr>
                     </thead>
@@ -42,6 +43,10 @@
 	                        <td th:text="${produto.marca}"></td>
 	                        <td th:text="${produto.valorVenda}"></td>
 	                        <td th:text="${produto.quantidadeEstoque}"></td>
+													<td>
+														<img th:src="@{/administrativo/produtos/mostrarImagem/{imagem}(imagem=${produto.nomeImagem})}" 
+														width="100" />
+													</td>
 	                        <td colspan="2">
 	                            <a class="btn btn-info btn-sm" th:href="@{/administrativo/produtos/editar/{id}(id=${produto.id})}" role="button">
 	                                <span class="oi oi-brush" title="Editar" aria-hidden="true"></span>
