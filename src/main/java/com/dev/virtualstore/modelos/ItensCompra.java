@@ -28,6 +28,7 @@ public class ItensCompra implements Serializable {
 	private Compra compra;
 	private Integer quantidade;
 	private Double valorUnitario;
+	private Double valorTotal;
 
 	public Long getId() {
 		return id;
@@ -56,8 +57,10 @@ public class ItensCompra implements Serializable {
 	public Integer getQuantidade() {
 		return quantidade;
 	}
-
+	
 	public void setQuantidade(Integer quantidade) {
+		if (quantidade == null)
+			quantidade = 0;
 		this.quantidade = quantidade;
 	}
 
@@ -67,5 +70,13 @@ public class ItensCompra implements Serializable {
 
 	public void setValorUnitario(Double valorUnitario) {
 		this.valorUnitario = valorUnitario;
-	}	
+	}
+
+	public Double getValorTotal() {
+		return valorTotal;
+	}
+
+	public void setValorTotal(Double valorTotal) {
+		this.valorTotal = valorTotal;
+	}
 }
