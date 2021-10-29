@@ -9,7 +9,7 @@ public class CarrinhoControle {
 
 	@GetMapping("/carrinho")
 	public ModelAndView chamarCarrinho() {
-		ModelAndView mv = new ModelAndView("carrinho");
+		ModelAndView mv = new ModelAndView("cliente/carrinho");
 		return mv;
 	}
 }
