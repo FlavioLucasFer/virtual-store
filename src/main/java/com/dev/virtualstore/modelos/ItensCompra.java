@@ -55,12 +55,13 @@ public class ItensCompra implements Serializable {
 	}
 
 	public Integer getQuantidade() {
+		if (quantidade == null)
+			quantidade = 0;
+
 		return quantidade;
 	}
 	
 	public void setQuantidade(Integer quantidade) {
-		if (quantidade == null)
-			quantidade = 0;
 		this.quantidade = quantidade;
 	}
 

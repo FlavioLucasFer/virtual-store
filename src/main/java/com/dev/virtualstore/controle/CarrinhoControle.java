@@ -37,14 +37,25 @@ public class CarrinhoControle {
 		Produto p = produto.get();
 		ItensCompra item = new ItensCompra();
 
-		item.setProduto(p);
-		item.setValorUnitario(p.getValorVenda());
-		item.setQuantidade(item.getQuantidade()+1);
-		item.setValorTotal(item.getQuantidade()*item.getValorUnitario());
+		boolean controle = false;
+		for (ItensCompra it: this.itensCompra) {
+			if (it.getProduto().getId().equals(p.getId())) {
+				controle = true;
+				it.setQuantidade(it.getQuantidade()+1);
+				break;
+			}
+		}
 
-		this.itensCompra.add(item);
-
-		mv.addObject("listaItens", this.itensCompra);
+		if (!controle) {
+			item.setProduto(p);
+			item.setValorUnitario(p.getValorVenda());
+			item.setQuantidade(item.getQuantidade()+1);
+			item.setValorTotal(item.getQuantidade()*item.getValorUnitario());
+	
+			this.itensCompra.add(item);
+	
+			mv.addObject("listaItens", this.itensCompra);
+		}
 
 		return mv;
 	}
