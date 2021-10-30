@@ -3,6 +3,7 @@ package com.dev.virtualstore.modelos;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.validator.constraints.br.CPF;
 
 @Entity
 @Table(name="funcionario")
@@ -41,6 +44,10 @@ public class Funcionario implements Serializable {
 	private String cep;
 	private String email;
 	private String senha;
+
+	@CPF(message = "CPF inválido")
+	@Column(length = 14)
+	private String cpf;
 	
 	public Long getId() {
 		return id;
@@ -160,5 +167,13 @@ public class Funcionario implements Serializable {
 	
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 }
