@@ -21,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.dev.virtualstore.modelos.Produto;
+import com.dev.virtualstore.repositorios.CategoriaProdutoRepositorio;
+import com.dev.virtualstore.repositorios.MarcaProdutoRepositorio;
 import com.dev.virtualstore.repositorios.ProdutoRepositorio;
 
 @Controller
@@ -29,17 +31,27 @@ public class ProdutoControle {
 
 	@Autowired
 	private ProdutoRepositorio produtoRepositorio;
+
+	@Autowired
+	private CategoriaProdutoRepositorio categoriaRepositorio;
+
+	@Autowired
+	private MarcaProdutoRepositorio marcaRepositorio;
 	
 	@GetMapping("/administrativo/produtos/cadastrar")
 	public ModelAndView cadastrar(Produto produto) {
 		ModelAndView mv = new ModelAndView("/administrativo/produtos/cadastro");
 		mv.addObject("produto", produto);
+		mv.addObject("listaCategoriasProduto", this.categoriaRepositorio.findAll());
+		mv.addObject("listaMarcasProduto", this.marcaRepositorio.findAll());
+
 		return mv;
 	}
 	
 	@GetMapping("/administrativo/produtos/listar")
 	public ModelAndView listar() {
 		ModelAndView mv = new ModelAndView("administrativo/produtos/lista");
+		System.out.println("produtos: "+this.produtoRepositorio.findAll());
 		mv.addObject("listaProdutos", this.produtoRepositorio.findAll());
 		
 		return mv;
