@@ -46,6 +46,8 @@ public class BasicConfiguration extends WebSecurityConfigurerAdapter {
 		http.csrf()
 			.disable()
 			.authorizeRequests()
+			.antMatchers("login/**")
+			.permitAll()
 			.antMatchers("/administrativo/entrada/**")
 			.hasAuthority("gerente")
 			.antMatchers("/administrativo/**")
