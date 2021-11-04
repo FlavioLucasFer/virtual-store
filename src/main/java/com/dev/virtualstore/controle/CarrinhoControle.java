@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.dev.virtualstore.modelos.Compra;
 import com.dev.virtualstore.modelos.ItensCompra;
 import com.dev.virtualstore.modelos.Produto;
 import com.dev.virtualstore.repositorios.ProdutoRepositorio;
@@ -18,13 +19,29 @@ import org.springframework.web.servlet.ModelAndView;
 public class CarrinhoControle {
 
 	private List<ItensCompra> itensCompra = new ArrayList<ItensCompra>();
+	private Compra compra = new Compra();
 
 	@Autowired
 	private ProdutoRepositorio produtoRepositorio;
 
+	private void calcularTotal() {
+		this.compra.setValorTotal(.0);
+		for (ItensCompra it : this.itensCompra) {
+			this.compra.setValorTotal(this.compra.getValorTotal() + it.getValorTotal());
+		}
+	}
+
+	private ItensCompra calcularValorTotalItem(ItensCompra item) {
+		item.setValorTotal(.0);
+		item.setValorTotal(item.getValorTotal() + (item.getQuantidade() * item.getValorUnitario()));
+		return item;
+	}
+
 	@GetMapping("/carrinho")
 	public ModelAndView chamarCarrinho() {
 		ModelAndView mv = new ModelAndView("cliente/carrinho");
+		calcularTotal();
+		mv.addObject("compra", this.compra);
 		mv.addObject("listaItens", this.itensCompra);
 		return mv;
 	}
@@ -33,10 +50,14 @@ public class CarrinhoControle {
 	public String alterarQuantidade(@PathVariable Long id, @PathVariable Integer acao) {
 		for (ItensCompra it : this.itensCompra) {
 			if (it.getProduto().getId().equals(id)) {
-				if (acao.equals(1))
+				if (acao.equals(1)) {
 					it.setQuantidade(it.getQuantidade() + 1);
-				else if (acao.equals(0) && it.getQuantidade() > 1)
+					it = calcularValorTotalItem(it);
+				}
+				else if (acao.equals(0) && it.getQuantidade() > 1) {
 					it.setQuantidade(it.getQuantidade() - 1);
+					it = calcularValorTotalItem(it);
+				}
 				break;
 			}
 		}
@@ -68,6 +89,7 @@ public class CarrinhoControle {
 			if (it.getProduto().getId().equals(p.getId())) {
 				controle = true;
 				it.setQuantidade(it.getQuantidade()+1);
+				it = calcularValorTotalItem(it);
 				break;
 			}
 		}
@@ -76,7 +98,7 @@ public class CarrinhoControle {
 			item.setProduto(p);
 			item.setValorUnitario(p.getValorVenda());
 			item.setQuantidade(item.getQuantidade()+1);
-			item.setValorTotal(item.getQuantidade()*item.getValorUnitario());
+			item = calcularValorTotalItem(item);
 	
 			this.itensCompra.add(item);
 		}
