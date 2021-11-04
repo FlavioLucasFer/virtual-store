@@ -30,7 +30,7 @@ public class Compra implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataCompra = new Date();
 	private String formaPagamento;
-	private Double valorTotal;
+	private Double valorTotal = .0;
 
 	public Long getId() {
 		return id;
