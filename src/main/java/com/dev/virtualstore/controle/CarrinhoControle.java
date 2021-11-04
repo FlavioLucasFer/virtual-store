@@ -30,7 +30,7 @@ public class CarrinhoControle {
 	}
 
 	@GetMapping("/alterarQuantidade/{id}/{acao}")
-	public ModelAndView alterarQuantidade(@PathVariable Long id, @PathVariable Integer acao) {
+	public String alterarQuantidade(@PathVariable Long id, @PathVariable Integer acao) {
 		for (ItensCompra it : this.itensCompra) {
 			if (it.getProduto().getId().equals(id)) {
 				if (acao.equals(1))
@@ -41,11 +41,11 @@ public class CarrinhoControle {
 			}
 		}
 
-		return this.chamarCarrinho();
+		return "redirect:/carrinho";
 	}
 
 	@GetMapping("/removerProduto/{id}")
-	public ModelAndView removerProdutoCarrinho(@PathVariable Long id) {
+	public String removerProdutoCarrinho(@PathVariable Long id) {
 		for (ItensCompra it : this.itensCompra) {
 			if (it.getProduto().getId().equals(id)) {
 				itensCompra.remove(it);
@@ -54,13 +54,11 @@ public class CarrinhoControle {
 			}
 		}
 
-		return this.chamarCarrinho();
+		return "redirect:/carrinho";
 	}
 
 	@GetMapping("/adicionarCarrinho/{id}")
-	public ModelAndView chamarCarrinho(@PathVariable Long id) {
-		ModelAndView mv = new ModelAndView("cliente/carrinho");
-		
+	public String adicionarCarrinho(@PathVariable Long id) {
 		Optional<Produto> produto = this.produtoRepositorio.findById(id);
 		Produto p = produto.get();
 		ItensCompra item = new ItensCompra();
@@ -81,10 +79,8 @@ public class CarrinhoControle {
 			item.setValorTotal(item.getQuantidade()*item.getValorUnitario());
 	
 			this.itensCompra.add(item);
-	
-			mv.addObject("listaItens", this.itensCompra);
 		}
 
-		return mv;
+		return "redirect:/carrinho";
 	}
 }
