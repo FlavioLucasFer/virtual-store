@@ -9,6 +9,8 @@ import com.dev.virtualstore.modelos.Compra;
 import com.dev.virtualstore.modelos.ItensCompra;
 import com.dev.virtualstore.modelos.Produto;
 import com.dev.virtualstore.repositorios.ClienteRepositorio;
+import com.dev.virtualstore.repositorios.CompraRepositorio;
+import com.dev.virtualstore.repositorios.ItensCompraRepositorio;
 import com.dev.virtualstore.repositorios.ProdutoRepositorio;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -32,6 +35,13 @@ public class CarrinhoControle {
 
 	@Autowired
 	private ProdutoRepositorio produtoRepositorio;
+
+	@Autowired
+	private CompraRepositorio compraRepositorio;
+
+	@Autowired
+	private ItensCompraRepositorio itensCompraRepositorio;
+
 
 	private void calcularTotal() {
 		this.compra.setValorTotal(.0);
@@ -71,6 +81,25 @@ public class CarrinhoControle {
 		mv.addObject("compra", this.compra);
 		mv.addObject("listaItens", this.itensCompra);
 		mv.addObject("cliente", this.cliente);
+		return mv;
+	}
+
+	@PostMapping("/finalizar/confirmar")
+	public ModelAndView confirmarCompra(String formaPagamento) {
+		ModelAndView mv = new ModelAndView("cliente/mensagemFinalizou");
+
+		this.compra.setCliente(this.cliente);
+		this.compra.setFormaPagamento(formaPagamento);
+		this.compraRepositorio.saveAndFlush(this.compra);
+
+		for (ItensCompra it : this.itensCompra) {
+			it.setCompra(this.compra);
+			this.itensCompraRepositorio.saveAndFlush(it);
+		}
+
+		this.itensCompra = new ArrayList<ItensCompra>(); 
+		this.compra = new Compra();
+
 		return mv;
 	}
 
