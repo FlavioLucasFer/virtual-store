@@ -12,8 +12,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.br.CPF;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
 @Table(name="funcionario")
@@ -26,7 +29,7 @@ public class Funcionario implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
+	@NotEmpty(message = "Nome é obrigatório")
 	private String nome;
 	private Double salarioBruto;
 	@Temporal(TemporalType.DATE)
@@ -42,6 +45,8 @@ public class Funcionario implements Serializable {
 	private String bairro;
 	private String uf;
 	private String cep;
+	@NotEmpty(message = "Email é obrigatório")
+	@Email(message = "Email inválido")
 	private String email;
 	private String senha;
 	private String codigoRecuperacao;
@@ -169,7 +174,7 @@ public class Funcionario implements Serializable {
 	}
 	
 	public void setSenha(String senha) {
-		this.senha = senha;
+		this.senha = new BCryptPasswordEncoder().encode(senha);
 	}
 
 	public String getCpf() {
@@ -177,7 +182,10 @@ public class Funcionario implements Serializable {
 	}
 
 	public void setCpf(String cpf) {
-		this.cpf = cpf;
+		if (cpf != null && cpf.trim().length() == 0)
+			this.cpf = null;
+		else
+			this.cpf = cpf;
 	}
 
 	public String getCodigoRecuperacao() {

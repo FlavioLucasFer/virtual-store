@@ -8,7 +8,6 @@ import java.util.Random;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -70,11 +69,34 @@ public class FuncionarioControle {
 		if (result.hasErrors()) {
 			return cadastrar(funcionario);
 		}
-		
-		funcionario.setSenha(new BCryptPasswordEncoder().encode(funcionario.getSenha()));
+
+		String senha = this.gerarSenhaAleatoria();
+
+		System.out.println("senha: "+senha);
+
+		funcionario.setSenha(senha);
 		this.funcionarioRepositorio.saveAndFlush(funcionario);
+
+		System.out.println("senha: " + senha);
+
+		this.enviarEmailEmOutraThread(funcionario.getEmail(), "Senha de acesso ao sistema",
+				"Seja bem vindo à Virtual Store " + funcionario.getNome() + "!"
+						+ "\nPara sua segurança geramos uma senha aleatória, acreditamos que isso é mais seguro para você. "
+						+ "\nSua senha de acesso ao sistema é: " + senha);
+
+		System.out.println("senha: " + senha);
 		
 		return this.listar();
+	}
+
+	private void enviarEmailEmOutraThread(String destinatario, String assunto, String mensagem) {
+		new Thread() {
+
+			@Override
+			public void run() {
+				emailServico.enviar(destinatario, assunto, mensagem);
+			}
+		}.start();
 	}
 
 	private String gerarSenhaAleatoria() {
@@ -157,7 +179,7 @@ public class FuncionarioControle {
 				throw new Exception("Código de recuperação inválido!");
 
 			String novaSenha = this.gerarSenhaAleatoria();
-			funcionario.setSenha(new BCryptPasswordEncoder().encode(novaSenha));
+			funcionario.setSenha(novaSenha);
 			funcionario.setCodigoRecuperacao(null);
 			funcionario.setDataCodigoRecuperacao(null);
 
