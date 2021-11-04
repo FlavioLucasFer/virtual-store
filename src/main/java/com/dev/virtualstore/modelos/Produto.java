@@ -1,12 +1,15 @@
 package com.dev.virtualstore.modelos;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -29,7 +32,8 @@ public class Produto implements Serializable {
 	@ManyToOne
 	private MarcaProduto marca;
 	private Double quantidadeEstoque=0.;
-	private String nomeImagem;
+	@OneToMany(mappedBy = "produto")
+	private List<FotoProduto> fotos;
 
 	public Long getId() {
 		return id;
@@ -85,11 +89,7 @@ public class Produto implements Serializable {
 		this.quantidadeEstoque = quantidadeEstoque;
 	}
 
-	public String getNomeImagem() {
-		return nomeImagem;
-	}
-
-	public void setNomeImagem(String nomeImagem) {
-		this.nomeImagem = nomeImagem;
+	public List<FotoProduto> getFotos() {
+		return fotos;
 	}
 }

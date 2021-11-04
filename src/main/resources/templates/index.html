@@ -67,8 +67,14 @@
 					<div class="col-lg-4 col-md-6 mb-4"
 						th:each="produto : ${listaProdutos}">
 						<div class="card h-100">
-							<a href="#"><img class="img-fluid"
-								th:src="@{/mostrarImagem/{imagem}(imagem=${produto.nomeImagem})}" /></a>
+							<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+								<div class="carousel-inner">
+									<div class="carousel-item" th:each="foto, row: ${produto.fotos}" th:classappend="${row.index == 1} ? 'active'">
+										<img class="d-block img-fluid"
+											th:src="@{/administrativo/produtos/mostrarImagem/{imagem}(imagem=${foto.nome})}">
+									</div>
+								</div>
+							</div>
 							<div class="card-body">
 								<h4 class="card-title">
 									<a href="#"><span th:text="${produto.descricao}"></span></a>
