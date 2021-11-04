@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{administrativo/fragments/layout}">
 <head>
-	<title>Página de listagem de Estados da loja virtual</title>
+	<title>Página de listagem de Entradas dos Produtos da loja virtual</title>
 </head>
 <body>
     <section class="layout-content" layout:fragment="corpo">
@@ -10,12 +10,12 @@
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
                         <i class="oi oi-caret-right"></i>
-                        <span>Lista de Estados</span>
+                        <span>Lista de Entradas dos Produtos</span>
                     </li>
                 </ul>
-                <a class="btn btn-primary btn-md" href="/administrativo/estados/cadastrar" role="button">
+                <a class="btn btn-primary btn-md" href="/administrativo/entrada/cadastrar" role="button">
                     <span class="oi oi-plus" title="Cadastro" aria-hidden="true"></span>
-                    <span>Cadastrar Estado</span>
+                    <span>Cadastrar Entrada de Produto</span>
                 </a>
             </div>
         </nav>
@@ -26,45 +26,19 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Nome</th>
-                        <th>Sigla</th>
-                        <th>Ação</th>
+                        <th>Observação</th>
+                        <th>Funcionário</th>
+                        <th>Fornecedor</th>
+                        <th>Data/hora entrada</th>
                     </tr>
                     </thead>
                     <tbody>
-	                    <tr th:each="estado : ${listaEstados}">
-	                        <td th:text="${estado.id}"></td>
-	                        <td th:text="${estado.nome}"></td>
-	                        <td th:text="${estado.sigla}"></td>
-	                        <td colspan="2">
-	                            <a class="btn btn-info btn-sm" th:href="@{/administrativo/estados/editar/{id}(id=${estado.id})}" role="button">
-	                                <span class="oi oi-brush" title="Editar" aria-hidden="true"></span>
-	                            </a>
-	                            
-	                            <a class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-warning" th:attr="data-target='#modal-warning'+${estado.id }">
-	                            	<span class="oi oi-circle-x" title="Remover" aria-hidden="true"></span>
-	                            </a>
-	                            
-	                            <div class="modal modal-warning fade in" th:id="modal-warning+${estado.id }" >
-								    <div class="modal-dialog">
-								        <div class="modal-content">
-								            <div class="modal-header">
-								            	<h5 class="modal-title">Remover Estado</h5>
-								                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-								                    <span aria-hidden="true">×</span>
-								                </button>
-								            </div>
-								            <div class="modal-body">
-								                <h3>Tem certeza que deseja remover este Estado?</h3>
-								            </div>
-								            <div class="modal-footer">
-								                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Fechar</button>
-								                <a type="button" class="btn btn-outline" th:href="@{/administrativo/estados/remover/{id}(id=${estado.id})}"><i class="fa fa-check"></i>&nbsp;Sim</a>
-								            </div>
-								        </div>
-								    </div>
-								</div>
-	                        </td>
+	                    <tr th:each="entrada : ${listaEntradasProdutos}">
+	                        <td th:text="${entrada.id}"></td>
+	                        <td th:text="${entrada.observacao}"></td>
+	                        <td th:text="${entrada.funcionario.nome}"></td>
+	                        <td th:text="${entrada.fornecedor}"></td>
+	                        <td th:text="${#dates.format(entrada.dataEntrada, 'dd/MM/yyyy hh:mm:ss')}"></td></td>
 	                    </tr>
                     </tbody>
                 </table>

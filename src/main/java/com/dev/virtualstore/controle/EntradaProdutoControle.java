@@ -45,13 +45,13 @@ public class EntradaProdutoControle {
 		return mv;
 	}
 	
-//	@GetMapping("/administrativo/entrada/listar")
-//	public ModelAndView listar() {
-//		ModelAndView mv = new ModelAndView("administrativo/entrada/lista");
-//		mv.addObject("listaCidades", this.entradaProdutoRepositorio.findAll());
-//		
-//		return mv;
-//	}
+	@GetMapping("/administrativo/entrada/listar")
+	public ModelAndView listar() {
+		ModelAndView mv = new ModelAndView("administrativo/entrada/lista");
+		mv.addObject("listaEntradasProdutos", this.entradaProdutoRepositorio.findAll());
+		
+		return mv;
+	}
 	
 //	@GetMapping("/administrativo/entrada/editar/{id}")
 //	public ModelAndView editar(@PathVariable("id") Long id) {
