@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.dev.virtualstore.modelos.Cliente;
 import com.dev.virtualstore.modelos.Compra;
 import com.dev.virtualstore.modelos.ItensCompra;
 import com.dev.virtualstore.modelos.Produto;
+import com.dev.virtualstore.repositorios.ClienteRepositorio;
 import com.dev.virtualstore.repositorios.ProdutoRepositorio;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +25,10 @@ public class CarrinhoControle {
 
 	private List<ItensCompra> itensCompra = new ArrayList<ItensCompra>();
 	private Compra compra = new Compra();
+	private Cliente cliente;
+
+	@Autowired
+	private ClienteRepositorio repositorioCliente;
 
 	@Autowired
 	private ProdutoRepositorio produtoRepositorio;
@@ -37,6 +46,14 @@ public class CarrinhoControle {
 		return item;
 	}
 
+	private void buscarUsuarioLogado() {
+		Authentication autenticado = SecurityContextHolder.getContext().getAuthentication();
+		if (!(autenticado instanceof AnonymousAuthenticationToken)) {
+			String email = autenticado.getName();
+			cliente = repositorioCliente.buscarClienteEmail(email).get(0);
+		}
+	}
+
 	@GetMapping("/carrinho")
 	public ModelAndView chamarCarrinho() {
 		ModelAndView mv = new ModelAndView("cliente/carrinho");
@@ -48,10 +65,12 @@ public class CarrinhoControle {
 
 	@GetMapping("/finalizar")
 	public ModelAndView finalizarCompra() {
+		buscarUsuarioLogado();
 		ModelAndView mv = new ModelAndView("cliente/finalizar");
 		calcularTotal();
 		mv.addObject("compra", this.compra);
 		mv.addObject("listaItens", this.itensCompra);
+		mv.addObject("cliente", this.cliente);
 		return mv;
 	}
 
