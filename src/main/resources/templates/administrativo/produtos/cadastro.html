@@ -3,8 +3,11 @@
 <head>
 	<title>Página de cadastro de produto da loja virtual</title>
 </head>
+
+
 <body>
-    <section class="layout-content" layout:fragment="corpo">
+
+	<section class="layout-content" layout:fragment="corpo">
 		<div class="page-header">
 			<nav class="navbar navbar-expand-md navbar-top bg-light">
 				<div class="collapse navbar-collapse" id="navbarsExampleDefault">
@@ -71,9 +74,12 @@
 
 				</div>
 				
-				<div class="form-group col-md-12">
-					<input type="file" name="file" />
-				</div>
+				<div class="form-group col-md-6">
+					<input type="file" 
+						name="files"
+						accept="image/*" 
+						multiple />
+				</div> 
 				
 				<input type="hidden" id="id" th:field="*{id}" value="" />
 				<div class="form-row">

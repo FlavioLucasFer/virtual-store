@@ -21,8 +21,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.dev.virtualstore.modelos.FotoProduto;
 import com.dev.virtualstore.modelos.Produto;
 import com.dev.virtualstore.repositorios.CategoriaProdutoRepositorio;
+import com.dev.virtualstore.repositorios.FotoProdutoRepositorio;
 import com.dev.virtualstore.repositorios.MarcaProdutoRepositorio;
 import com.dev.virtualstore.repositorios.ProdutoRepositorio;
 
@@ -38,6 +40,9 @@ public class ProdutoControle {
 
 	@Autowired
 	private MarcaProdutoRepositorio marcaRepositorio;
+
+	@Autowired
+	private FotoProdutoRepositorio fotoProdutoRepositorio;
 	
 	@GetMapping("/administrativo/produtos/cadastrar")
 	public ModelAndView cadastrar(Produto produto) {
@@ -91,22 +96,26 @@ public class ProdutoControle {
 	}
 	
 	@PostMapping("/administrativo/produtos/salvar")
-	public ModelAndView salvar(@Valid Produto produto, BindingResult result, @RequestParam("file") MultipartFile arquivo) {
+	public ModelAndView salvar(@Valid Produto produto, BindingResult result, @RequestParam("files") MultipartFile[] arquivos) {
 		if (result.hasErrors()) 
 			return cadastrar(produto);
 		
 		this.produtoRepositorio.saveAndFlush(produto);
 
 		try {
-			if (!arquivo.isEmpty()) {
-				byte[] bytes = arquivo.getBytes();
-				String nomeImagem = String.valueOf(produto.getId())+arquivo.getOriginalFilename();
+			if (arquivos.length > 0) {
+				for (MultipartFile arquivo : arquivos) {
+					byte[] bytes = arquivo.getBytes();
 
-				Path caminho =  Paths.get(caminhoImagens+nomeImagem);
-				Files.write(caminho, bytes);
+					String nomeImagem = String.valueOf(produto.getId())+arquivo.getOriginalFilename();
+	
+					Path caminho =  Paths.get(caminhoImagens+nomeImagem);
+					Files.write(caminho, bytes);
 
-				produto.setNomeImagem(nomeImagem);
-				this.produtoRepositorio.saveAndFlush(produto);
+					FotoProduto fotoProduto = new FotoProduto(nomeImagem, produto);
+
+					this.fotoProdutoRepositorio.saveAndFlush(fotoProduto);
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
