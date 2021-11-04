@@ -56,8 +56,157 @@
 			<div class="form-group">
 				<button type="submit" class="btn btn-primary btn-block">Entrar</button>
 			</div>
+
+			<div class="d-flex justify-content-center">
+				<a th:attr="onclick=${'modalRecuperarSenha()'}" href="#">recuperar senha</a>
+			</div>
 		</form>
 	</div>
+
+	<form th:action="@{/login/recuperarSenha/enviarCodigo}" method="post">
+		<div class="modal fade" id="recuperarSenhaModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="modalLabel">Recuperar senha</h4>
+		
+						<button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span
+								aria-hidden="true">&times;</span></button>
+					</div>
+		
+					<div id="body-modal-recuperar-senha" class="modal-body" style="text-align: justify;">
+						<input id="email-recuperar-senha" name="email-recuperar-senha" type="email" class="form-control" placeholder="Email"
+							required="required" />
+		
+						<small>Informe seu email para que possamos inviar um código de confirmação</small>
+					</div>
+		
+					<div class="modal-footer">
+						<button type="button" 
+							id="button-enviar-codigo-recuperacao"
+							class="btn btn-primary btn-block"
+							th:attr="onclick=${'submitEmailRecuperacaoSenha()'}">
+							Enviar código
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<form th:action="@{/login/recuperarSenha/confirmarCodigo}" method="post">
+		<div class="modal fade" id="confirmarCodigoModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="modalLabel">Recuperar senha</h4>
+		
+						<button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span
+								aria-hidden="true">&times;</span></button>
+					</div>
+		
+					<div id="body-modal-confirmar-codigo" class="modal-body" style="text-align: justify;">
+						<input id="codigo-recuperar-senha" name="codigo-recuperar-senha" type="text" class="form-control" placeholder="Código"
+							required="required" />
+		
+						<small>Informe o código de verificação que enviamos para seu email. Aṕos confirmar o código enviaremos uma nova senha para o seu email.</small>
+					</div>
+		
+					<div class="modal-footer">
+						<button type="button" 
+							id="button-gerar-nova-senha"
+							class="btn btn-primary btn-block"
+							th:attr="onclick=${'submitConfirmarCodigoRecuperacao()'}">
+							Gerar nova senha
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<script>
+		function modalRecuperarSenha() {
+			$("#email-recuperar-senha").val("");
+			$("#erro-recuperar-senha").remove();
+			$("#recuperarSenhaModal").modal('show');
+		};
+		
+		function modalCodigoVerificacao() {
+			$("#codigo-recuperar-senha").val("");
+			$("#erro-codigo-confirmacao").remove();
+			$("#confirmarCodigoModal").modal('show');
+		};
+
+		function restaurarBotaoEnviarCodigoRec() {
+			$("#button-enviar-codigo-recuperacao").attr("disabled", false);
+			$("#button-enviar-codigo-recuperacao").text("Enviar código")
+		}
+
+		function restaurarBotaoGerarNovaSenha() {
+			$("#button-gerar-nova-senha").attr("disabled", false);
+			$("#button-gerar-nova-senha").text("Gerar nova senha")
+		}
+
+		function submitEmailRecuperacaoSenha() {
+			const email = $("#email-recuperar-senha").val();
+
+			$.ajax({
+				url: "/login/recuperarSenha/enviarCodigo",
+				method: "post",
+				data: { email },
+				beforeSend: () => {
+					$("#button-enviar-codigo-recuperacao").attr("disabled", true);
+					$("#button-enviar-codigo-recuperacao").text("Aguarde...")
+				},
+				success: () => {
+					$("#recuperarSenhaModal").modal('hide');
+					restaurarBotaoEnviarCodigoRec();
+					modalCodigoVerificacao();
+				},
+				error: e => {
+					$("#email-recuperar-senha").val("");
+					$("#body-modal-recuperar-senha").prepend(`<div id="erro-recuperar-senha" class="alert alert-danger" role="alert">${e.responseJSON.message}</div>`);
+					restaurarBotaoEnviarCodigoRec();
+				}
+			});
+		}
+
+		function submitConfirmarCodigoRecuperacao() {
+			const email = $("#email-recuperar-senha").val();
+			const codigo = $("#codigo-recuperar-senha").val();
+
+			$.ajax({
+				url: "/login/recuperarSenha/confirmarCodigo",
+				method: "post",
+				data: { 
+					email,
+					codigo, 
+				},
+				beforeSend: () => {
+					$("#button-gerar-nova-senha").attr("disabled", true);
+					$("#button-gerar-nova-senha").text("Aguarde...")
+				},
+				success: () => {
+					$("#codigo-recuperar-senha").val("");
+					$("#confirmarCodigoModal").modal('hide');
+					$("body").prepend(`
+						<div class="d-flex justify-content-center">
+							<div style="width: 50%;" class="mt-4 alert alert-success" role="alert">
+								Senha redefinida com sucesso!
+							</div>
+						</div>
+					`);
+					restaurarBotaoGerarNovaSenha();
+				},
+				error: e => {
+					$("#codigo-recuperar-senha").val("");
+					$("#body-modal-confirmar-codigo").prepend(`<div id="erro-codigo-confirmacao" class="alert alert-danger" role="alert">${e.responseJSON.message}</div>`);
+					restaurarBotaoGerarNovaSenha();
+				}
+			});
+		}
+	</script>
 </body>
 
 </html>

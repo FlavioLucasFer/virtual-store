@@ -44,6 +44,9 @@ public class Funcionario implements Serializable {
 	private String cep;
 	private String email;
 	private String senha;
+	private String codigoRecuperacao;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataCodigoRecuperacao = new Date();
 
 	@CPF(message = "CPF inválido")
 	@Column(length = 14)
@@ -175,5 +178,21 @@ public class Funcionario implements Serializable {
 
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
+	}
+
+	public String getCodigoRecuperacao() {
+		return codigoRecuperacao;
+	}
+
+	public void setCodigoRecuperacao(String codigoRecuperacao) {
+		this.codigoRecuperacao = codigoRecuperacao;
+	}
+
+	public Date getDataCodigoRecuperacao() {
+		return dataCodigoRecuperacao;
+	}
+
+	public void setDataCodigoRecuperacao(Date dataCodigoRecuperacao) {
+		this.dataCodigoRecuperacao = dataCodigoRecuperacao;
 	}
 }

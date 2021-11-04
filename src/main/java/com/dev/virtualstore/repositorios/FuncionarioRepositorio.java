@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.dev.virtualstore.modelos.Funcionario;
 
 public interface FuncionarioRepositorio extends JpaRepository<Funcionario, Long> {
-
+	Funcionario findByEmail(String email);
 }
