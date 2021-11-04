@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,7 @@ import com.dev.virtualstore.repositorios.ProdutoRepositorio;
 @Controller
 public class ProdutoControle {
 	private static String caminhoImagens = "/home/flavio/Documentos/imagens/";
+	private int quantidadeLote = 50000;
 
 	@Autowired
 	private ProdutoRepositorio produtoRepositorio;
@@ -138,4 +140,25 @@ public class ProdutoControle {
 
 		return this.listar();
 	}
+
+	@GetMapping("/administrativo/produtos/inserirLote")
+	public ModelAndView inserirLote() {
+		List<Produto> produtos = new ArrayList<Produto>();
+
+		for (int i = 1; i <= this.quantidadeLote; i++) {
+			Produto produto = new Produto();
+
+			produto.setDescricao("Produto "+i);
+			produto.setValorVenda(i+.5);
+			produto.setQuantidadeEstoque(i*2.5);
+
+			produtos.add(produto);
+		}
+
+		this.quantidadeLote += 50000;
+		this.produtoRepositorio.saveAllAndFlush(produtos);
+
+		return this.listar();
+	}
+	
 }
