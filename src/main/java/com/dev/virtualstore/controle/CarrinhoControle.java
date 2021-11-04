@@ -44,6 +44,19 @@ public class CarrinhoControle {
 		return this.chamarCarrinho();
 	}
 
+	@GetMapping("/removerProduto/{id}")
+	public ModelAndView removerProdutoCarrinho(@PathVariable Long id) {
+		for (ItensCompra it : this.itensCompra) {
+			if (it.getProduto().getId().equals(id)) {
+				itensCompra.remove(it);
+
+				break;
+			}
+		}
+
+		return this.chamarCarrinho();
+	}
+
 	@GetMapping("/adicionarCarrinho/{id}")
 	public ModelAndView chamarCarrinho(@PathVariable Long id) {
 		ModelAndView mv = new ModelAndView("cliente/carrinho");
