@@ -21,6 +21,75 @@
         </nav>
 
         <div class="container">
+						<p>
+							<i class="oi oi-magnifying-glass"></i><span></span>
+							<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDescricao"
+								aria-controls="collapseDescricao">Descrição
+							</button>
+							<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseMarca"
+								aria-controls="collapseMarca">Marca
+							</button>
+							<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseCategoria"
+								aria-controls="collapseCategoria">Categoria
+							</button>
+							<span></span>
+							<a href="/administrativo/produtos/listar">
+								<i title="Limpar filtros" class="oi oi-x"></i>
+							</a>
+						</p>
+						<div class="row">
+							<div class="col">
+								<div class="collapse" id="collapseDescricao">
+						
+									<nav class="navbar navbar-light bg-light">
+										<form class="form-inline" method="GET" action="/administrativo/produtos/buscar">
+											<input class="form-control mr-sm-2" type="search" placeholder="Descrição" aria-label="Search" name="descricao" />
+											<button class="btn btn-outline-success my-2 my-sm-0">Buscar</button>
+										</form>
+									</nav>
+						
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="collapse" id="collapseMarca">
+						
+									<nav class="navbar navbar-light bg-light">
+										<form class="form-inline" method="GET" action="/administrativo/produtos/buscar">
+											<select class="form-control mr-sm-2" name="marca" aria-label="Search">
+												<option th:each="marca: ${listaMarcasProduto}" 
+													th:value="${marca.id}" 
+													th:text="${marca.nome}">
+												</option>
+											</select>
+											<button class="btn btn-outline-success my-2 my-sm-0">Buscar</button>
+										</form>
+									</nav>
+						
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="collapse" id="collapseCategoria">
+						
+									<nav class="navbar navbar-light bg-light">
+										<form class="form-inline" method="GET" action="/administrativo/produtos/buscar">
+											<select class="form-control mr-sm-2" name="categoria" aria-label="Search">
+												<option th:each="categoria: ${listaCategoriasProduto}" 
+													th:value="${categoria.id}" 
+													th:text="${categoria.nome}">
+												</option>
+											</select>
+											<button class="btn btn-outline-success my-2 my-sm-0">Buscar</button>
+										</form>
+									</nav>
+						
+								</div>
+							</div>
+						</div>
+
             <div class="table-responsive">
                 <table class="table table-striped table-hover table-sm">
                     <thead>

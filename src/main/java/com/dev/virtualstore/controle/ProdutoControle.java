@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -47,12 +48,17 @@ public class ProdutoControle {
 
 		return mv;
 	}
-	
+
 	@GetMapping("/administrativo/produtos/listar")
 	public ModelAndView listar() {
+		return this.listar(this.produtoRepositorio.findAll());
+	}
+
+	public ModelAndView listar(List<Produto> produtos) {
 		ModelAndView mv = new ModelAndView("administrativo/produtos/lista");
-		System.out.println("produtos: "+this.produtoRepositorio.findAll());
-		mv.addObject("listaProdutos", this.produtoRepositorio.findAll());
+		mv.addObject("listaProdutos", produtos);
+		mv.addObject("listaCategoriasProduto", this.categoriaRepositorio.findAll());
+		mv.addObject("listaMarcasProduto", this.marcaRepositorio.findAll());
 		
 		return mv;
 	}
@@ -106,6 +112,21 @@ public class ProdutoControle {
 			e.printStackTrace();
 		}
 		
+		return this.listar();
+	}
+
+	@GetMapping("/administrativo/produtos/buscar")
+	public ModelAndView filtrarProdutos(@RequestParam(name = "descricao", required = false) String descricao,
+			@RequestParam(name = "categoria", required = false) Long categoria,
+			@RequestParam(name = "marca", required = false) Long marca) {
+
+		if (descricao != null) 
+			return this.listar(this.produtoRepositorio.findAllByDescricao(descricao));
+		else if (categoria != null)
+			return this.listar(this.produtoRepositorio.findAllByCategoria(categoria));
+		else if (marca != null)
+			return this.listar(this.produtoRepositorio.findAllByMarca(marca));
+
 		return this.listar();
 	}
 }
