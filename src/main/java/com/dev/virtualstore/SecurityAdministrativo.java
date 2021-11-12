@@ -42,7 +42,7 @@ public class SecurityAdministrativo extends WebSecurityConfigurerAdapter {
 			.loginPage("/login")
 			.failureUrl("/login")
 			.loginProcessingUrl("/admin")
-			.defaultSuccessUrl("/administrador")
+			.defaultSuccessUrl("/administrativo")
 			.usernameParameter("username")
 			.passwordParameter("password")
 			.and()
