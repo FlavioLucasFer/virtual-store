@@ -3,8 +3,11 @@
 <head>
 	<title>Página de cadastro de produto da loja virtual</title>
 </head>
+
+
 <body>
-    <section class="layout-content" layout:fragment="corpo">
+
+	<section class="layout-content" layout:fragment="corpo">
 		<div class="page-header">
 			<nav class="navbar navbar-expand-md navbar-top bg-light">
 				<div class="collapse navbar-collapse" id="navbarsExampleDefault">
@@ -23,6 +26,7 @@
 
 		<div class="container" id="cadastro">
 			<form action="/administrativo/produtos/salvar"
+				enctype="multipart/form-data"
 				th:object="${produto}" method="POST">
 				<div class="form-row">
 					<div class="form-group col-md-6">
@@ -35,23 +39,30 @@
 					</div>
 					
 					<div class="form-group col-md-6">
-						<label for="salario">Categoria</label> 
-						
-						<input type="text"
-							class="form-control" id="categoria" placeholder="Categoria do produto"
-							th:field="*{categoria}" value="" />
+						<label>Categoria</label>
+					
+						<select th:field="*{categoria}" class="form-control">
+							<option th:each="categoria: ${listaCategoriasProduto}" 
+								th:value="${categoria.id}" 
+								th:text="${categoria.nome}">
+							</option>
+						</select>
+					
 						<div class="invalid-feedback"></div>
 					</div>
 					
 					<div class="form-group col-md-6">
-						<label for="salario">Marca</label> 
-						
-						<input type="text"
-							class="form-control" id="marca" placeholder="Marca do produto"
-							th:field="*{marca}" value="" />
+						<label>Marca</label>
+					
+						<select th:field="*{marca}" class="form-control">
+							<option th:each="marca: ${listaMarcasProduto}" 
+								th:value="${marca.id}" 
+								th:text="${marca.nome}">
+							</option>
+						</select>
+					
 						<div class="invalid-feedback"></div>
 					</div>
-					
 					
 					<div class="form-group col-md-6">
 						<label for="salario">Valor de venda</label>
@@ -60,7 +71,15 @@
 							class="form-control" id="valor-venda"
 							th:field="*{valorVenda}" value="" />
 					</div>
+
 				</div>
+				
+				<div class="form-group col-md-6">
+					<input type="file" 
+						name="files"
+						accept="image/*" 
+						multiple />
+				</div> 
 				
 				<input type="hidden" id="id" th:field="*{id}" value="" />
 				<div class="form-row">

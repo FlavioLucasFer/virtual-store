@@ -13,6 +13,9 @@
                         <span>Lista de produtos</span>
                     </li>
                 </ul>
+								<a class="btn btn-primary btn-md mr-4" href="/administrativo/produtos/inserirLote" role="button">
+									Inserir lote
+								</a>
                 <a class="btn btn-primary btn-md" href="/administrativo/produtos/cadastrar" role="button">
                     <span class="oi oi-plus" title="Cadastro" aria-hidden="true"></span>
                     <span>Cadastrar produto</span>
@@ -21,6 +24,75 @@
         </nav>
 
         <div class="container">
+						<p>
+							<i class="oi oi-magnifying-glass"></i><span></span>
+							<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDescricao"
+								aria-controls="collapseDescricao">Descrição
+							</button>
+							<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseMarca"
+								aria-controls="collapseMarca">Marca
+							</button>
+							<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseCategoria"
+								aria-controls="collapseCategoria">Categoria
+							</button>
+							<span></span>
+							<a href="/administrativo/produtos/listar">
+								<i title="Limpar filtros" class="oi oi-x"></i>
+							</a>
+						</p>
+						<div class="row">
+							<div class="col">
+								<div class="collapse" id="collapseDescricao">
+						
+									<nav class="navbar navbar-light bg-light">
+										<form class="form-inline" method="GET" action="/administrativo/produtos/buscar">
+											<input class="form-control mr-sm-2" type="search" placeholder="Descrição" aria-label="Search" name="descricao" />
+											<button class="btn btn-outline-success my-2 my-sm-0">Buscar</button>
+										</form>
+									</nav>
+						
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="collapse" id="collapseMarca">
+						
+									<nav class="navbar navbar-light bg-light">
+										<form class="form-inline" method="GET" action="/administrativo/produtos/buscar">
+											<select class="form-control mr-sm-2" name="marca" aria-label="Search">
+												<option th:each="marca: ${listaMarcasProduto}" 
+													th:value="${marca.id}" 
+													th:text="${marca.nome}">
+												</option>
+											</select>
+											<button class="btn btn-outline-success my-2 my-sm-0">Buscar</button>
+										</form>
+									</nav>
+						
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="collapse" id="collapseCategoria">
+						
+									<nav class="navbar navbar-light bg-light">
+										<form class="form-inline" method="GET" action="/administrativo/produtos/buscar">
+											<select class="form-control mr-sm-2" name="categoria" aria-label="Search">
+												<option th:each="categoria: ${listaCategoriasProduto}" 
+													th:value="${categoria.id}" 
+													th:text="${categoria.nome}">
+												</option>
+											</select>
+											<button class="btn btn-outline-success my-2 my-sm-0">Buscar</button>
+										</form>
+									</nav>
+						
+								</div>
+							</div>
+						</div>
+
             <div class="table-responsive">
                 <table class="table table-striped table-hover table-sm">
                     <thead>
@@ -31,6 +103,7 @@
                         <th>Marca</th>
                         <th>Valor de venda</th>
                         <th>Quantidade em estoque</th>
+												<th>Imagem</th>
                         <th>Ação</th>
                     </tr>
                     </thead>
@@ -38,10 +111,23 @@
 	                    <tr th:each="produto : ${listaProdutos}">
 	                        <td th:text="${produto.id}"></td>
 	                        <td th:text="${produto.descricao}"></td>
-	                        <td th:text="${produto.categoria}"></td>
-	                        <td th:text="${produto.marca}"></td>
+	                        <td th:text="${produto.categoria.nome}"></td>
+	                        <td th:text="${produto.marca.nome}"></td>
 	                        <td th:text="${produto.valorVenda}"></td>
 	                        <td th:text="${produto.quantidadeEstoque}"></td>
+													<td>
+														<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+															<div class="carousel-inner">
+																<div class="carousel-item" 
+																	th:each="foto, row: ${produto.fotos}"
+																	th:classappend="${row.index == 1} ? 'active'">
+																	<img class="d-block"
+																		style="width: 100px;" 
+																		th:src="@{/administrativo/produtos/mostrarImagem/{imagem}(imagem=${foto.nome})}">
+																</div>
+															</div>
+														</div>
+													</td>
 	                        <td colspan="2">
 	                            <a class="btn btn-info btn-sm" th:href="@{/administrativo/produtos/editar/{id}(id=${produto.id})}" role="button">
 	                                <span class="oi oi-brush" title="Editar" aria-hidden="true"></span>
@@ -55,13 +141,13 @@
 								    <div class="modal-dialog">
 								        <div class="modal-content">
 								            <div class="modal-header">
-								            	<h5 class="modal-title">Remover Estado</h5>
+								            	<h5 class="modal-title">Remover Produto</h5>
 								                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
 								                    <span aria-hidden="true">×</span>
 								                </button>
 								            </div>
 								            <div class="modal-body">
-								                <h3>Tem certeza que deseja remover este Estado?</h3>
+								                <h3>Tem certeza que deseja remover este Produto?</h3>
 								            </div>
 								            <div class="modal-footer">
 								                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Fechar</button>

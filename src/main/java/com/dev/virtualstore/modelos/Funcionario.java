@@ -3,6 +3,7 @@ package com.dev.virtualstore.modelos;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +12,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.br.CPF;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
 @Table(name="funcionario")
@@ -23,7 +29,7 @@ public class Funcionario implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
+	@NotEmpty(message = "Nome é obrigatório")
 	private String nome;
 	private Double salarioBruto;
 	@Temporal(TemporalType.DATE)
@@ -39,8 +45,17 @@ public class Funcionario implements Serializable {
 	private String bairro;
 	private String uf;
 	private String cep;
+	@NotEmpty(message = "Email é obrigatório")
+	@Email(message = "Email inválido")
 	private String email;
 	private String senha;
+	private String codigoRecuperacao;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataCodigoRecuperacao = new Date();
+
+	@CPF(message = "CPF inválido")
+	@Column(length = 14)
+	private String cpf;
 	
 	public Long getId() {
 		return id;
@@ -159,6 +174,33 @@ public class Funcionario implements Serializable {
 	}
 	
 	public void setSenha(String senha) {
-		this.senha = senha;
+		this.senha = new BCryptPasswordEncoder().encode(senha);
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		if (cpf != null && cpf.trim().length() == 0)
+			this.cpf = null;
+		else
+			this.cpf = cpf;
+	}
+
+	public String getCodigoRecuperacao() {
+		return codigoRecuperacao;
+	}
+
+	public void setCodigoRecuperacao(String codigoRecuperacao) {
+		this.codigoRecuperacao = codigoRecuperacao;
+	}
+
+	public Date getDataCodigoRecuperacao() {
+		return dataCodigoRecuperacao;
+	}
+
+	public void setDataCodigoRecuperacao(Date dataCodigoRecuperacao) {
+		this.dataCodigoRecuperacao = dataCodigoRecuperacao;
 	}
 }
