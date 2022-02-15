@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.18.1.final using JasperReports Library version 6.18.1-9d75d1969e774d4f179fb3be8401e98a0e6d1611  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="clientes" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3c6a0291-30c6-45dd-95b7-e5450e0fa1f4">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="VirtualStore"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<queryString>
+		<![CDATA[SELECT cl.nome AS cliente,
+CONCAT('R$ ', c.valor_total) AS valor,
+DATE_FORMAT(c.data_compra, '%d/%m/%Y %H:%i:%s') AS data_compra,
+c.forma_pagamento AS forma_pagamento
+FROM compra AS c
+INNER JOIN cliente AS cl ON c.cliente_id = cl.id
+ORDER BY c.data_compra DESC]]>
+	</queryString>
+	<field name="cliente" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nome"/>
+		<property name="com.jaspersoft.studio.field.label" value="cliente"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+	</field>
+	<field name="valor" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="valor"/>
+		<property name="com.jaspersoft.studio.field.label" value="valor"/>
+	</field>
+	<field name="data_compra" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="data_compra"/>
+		<property name="com.jaspersoft.studio.field.label" value="data_compra"/>
+	</field>
+	<field name="forma_pagamento" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="forma_pagamento"/>
+		<property name="com.jaspersoft.studio.field.label" value="forma_pagamento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="compra"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="66" splitType="Stretch">
+			<staticText>
+				<reportElement x="-5" y="20" width="564" height="30" uuid="c9844071-673c-4402-ae14-f73ba17e03cb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="25" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Relatório de Vendas da VirtualStore]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="557" y="-7" width="68" height="30" uuid="fe62e45d-aa40-4ba3-a02a-f3ad1d322e94"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="0" y="0" width="160" height="25" uuid="fb88c5d6-1ce7-456b-8b76-f9b10a49d64a">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CLIENTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="170" y="0" width="120" height="25" backcolor="#706565" uuid="b2944f4f-6aab-4209-b390-6aabbde9bc4f">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[VALOR DA COMPRA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="453" y="0" width="110" height="25" backcolor="#FFFFFF" uuid="69a5f4ad-e1ee-41c9-989f-9bfebab3ef87">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATA DA COMPRA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="0" width="143" height="25" uuid="78f9a219-fe3e-4fae-b7b6-7cdebdbcce12">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FORMA DE PAGAMENTO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField>
+				<reportElement x="0" y="0" width="160" height="20" uuid="e70c6b17-a230-4208-b13e-6d7fc97b5d1a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="073828f2-4038-4ef0-a158-7d05560d3268"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="170" y="0" width="120" height="20" uuid="a019ce7a-91c9-437e-91cd-4e6663902368">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="47f1eaac-5277-437f-a438-5c01d72aa9a8"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="453" y="0" width="110" height="20" uuid="c016c0c8-f696-4b81-95a5-46f6b925bcdc">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="38a18820-861d-43e7-a44e-f4f8f0229ab5"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{data_compra}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="300" y="0" width="143" height="20" uuid="5de6f80e-0080-477a-87a9-36bbe5d2e74c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="05c791f5-07f5-459a-8875-b6911b8023ec"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{forma_pagamento}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="88" splitType="Stretch">
+			<textField pattern="HH:mm">
+				<reportElement x="436" y="76" width="43" height="12" uuid="81b40642-9a5c-4ace-85c6-bb1d29d3ceeb"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="473" y="76" width="100" height="12" uuid="115cc6c2-eeb0-4128-89bf-9fbe8fdab193"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
